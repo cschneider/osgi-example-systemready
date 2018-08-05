@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: example-kubernetes
+  name: example-kubernetes
+spec:
+  selector:
+    matchLabels:
+      run: example-kubernetes
+  template:
+    metadata:
+      labels:
+        run: example-kubernetes
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - image: cschneider/osgi.example.kubernetes
+        name: example-kubernetes
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: example-kubernetes
+  name: example-kubernetes
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 30215
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: example-kubernetes
+  type: LoadBalancer
