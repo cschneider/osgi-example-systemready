@@ -4,5 +4,10 @@
     ":configurator:version" : "1.0.0",
 
     "org.apache.felix.systemready.impl.FrameworkStartCheck": {
-           "target.start.level": 1 }
+           "target.start.level": 1 },
+
+
+    "org.apache.aries.jax.rs.whiteboard.default": {
+      "default.web": false
+    }
 }

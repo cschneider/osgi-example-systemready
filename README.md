@@ -79,3 +79,15 @@ Additionally it creates a service with a load balancer.
 
 Now test the steps from "access the deployment" abovce with the external IP
 instead of localhost.
+
+### Update kubernetes deployment
+
+Change some code.
+
+Then do
+
+	sh build.sh
+	kubectl delete pod -l run=example-kubernetes
+
+This builds and deploys the new docker image and then deletes all existing pods.
+This will cause kubernetes to spawn a new pod which loads the new image.
