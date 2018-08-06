@@ -6,6 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardResource;
 import org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsResource;
 
@@ -15,10 +16,13 @@ import org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsResource;
 @Produces(MediaType.APPLICATION_JSON)
 @HttpWhiteboardResource(pattern="/rest/*", prefix="static")
 public class HelloResource {
+	
+	@Reference
+	HelloComponent hello;
 
 	@GET
 	public String get() {
-		return "Hello World";
+		return hello.say();
 	}
 	
 }
