@@ -1,6 +1,1 @@
 language: java
-deploy:
-  provider: script
-  script: scripts/k8s-deploy.sh
-  on:
-    branch: master
