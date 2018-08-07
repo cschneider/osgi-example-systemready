@@ -1,4 +1,6 @@
--standalone: ${.}/target/index.xml
+index: target/index.xml;name="app"
+
+-standalone: ${index}
 
 -resolve.effective: active;skip:="osgi.service"
 
