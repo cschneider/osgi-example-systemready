@@ -4,10 +4,7 @@ sudo: required
 services:
   - docker
   
-before-deploy:
-  - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-
 deploy:
   skip-cleanup: true
   provider: script
-  script: sh build.sh
+  script: /bin/sh build.sh
