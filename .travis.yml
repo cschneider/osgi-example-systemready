@@ -5,7 +5,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t "$DOCKER_USERNAME"/osgi.example.kubernetes starter
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push "$DOCKER_USERNAME"/osgi.example.kubernetes
+  - docker build -t $DOCKER_USERNAME/osgi.example.kubernetes starter
+  - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+  - docker push $DOCKER_USERNAME/osgi.example.kubernetes
  
