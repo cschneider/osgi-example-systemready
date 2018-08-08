@@ -4,7 +4,7 @@ index: target/index.xml;name="app"
 
 -resolve.effective: active;skip:="osgi.service"
 
--runproperties: logback.configurationFile=file:${.}/logback.xml
+-runproperties: logback.configurationFile=file:logback.xml
 
 -runfw: org.apache.felix.framework
 -runee: JavaSE-1.8
