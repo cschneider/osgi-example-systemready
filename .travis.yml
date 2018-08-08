@@ -4,7 +4,7 @@ sudo: required
 services:
   - docker
 
-before_install:
+after_install:
   - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
   - docker build -t $DOCKER_USERNAME/osgi.example.kubernetes .
   - docker push $DOCKER_USERNAME/osgi.example.kubernetes
