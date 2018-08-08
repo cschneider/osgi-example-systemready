@@ -3,6 +3,7 @@ package net.lr.ds.hello;
 import org.apache.felix.systemready.CheckStatus;
 import org.apache.felix.systemready.StateType;
 import org.apache.felix.systemready.SystemReadyCheck;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.metatype.annotations.Designate;
@@ -21,6 +22,13 @@ public class ReadyCheck implements SystemReadyCheck {
 		String dummy();
     }
 
+	private long startTime;
+	
+	@Activate
+	public void activate() {
+		startTime = System.currentTimeMillis();
+	}
+
 	@Override
 	public String getName() {
 		return "Switchable ready check";
@@ -28,7 +36,8 @@ public class ReadyCheck implements SystemReadyCheck {
 
 	@Override
 	public CheckStatus getStatus() {
-		return new CheckStatus(getName(), StateType.READY, CheckStatus.State.RED , "");
+		CheckStatus.State state = System.currentTimeMillis() - startTime < 60000 ? CheckStatus.State.RED : CheckStatus.State.GREEN;
+		return new CheckStatus(getName(), StateType.READY, state , "");
 	}
 
 }
