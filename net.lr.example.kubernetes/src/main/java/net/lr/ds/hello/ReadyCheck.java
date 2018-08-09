@@ -1,34 +1,28 @@
 package net.lr.ds.hello;
 
+import java.io.IOException;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.felix.systemready.CheckStatus;
 import org.apache.felix.systemready.StateType;
 import org.apache.felix.systemready.SystemReadyCheck;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.metatype.annotations.Designate;
-import org.osgi.service.metatype.annotations.ObjectClassDefinition;
+import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletPattern;
 
-import net.lr.ds.hello.ReadyCheck.Config;
-
-@Component(configurationPolicy=ConfigurationPolicy.REQUIRE)
-@Designate(ocd=Config.class)
-public class ReadyCheck implements SystemReadyCheck {
+@SuppressWarnings("serial")
+@Component
+@HttpWhiteboardServletPattern("/control/notready")
+public class ReadyCheck extends HttpServlet implements SystemReadyCheck, Servlet {
 	
-	@ObjectClassDefinition(
-            name="ReadyCheck"
-    )
-    public static @interface Config {
-		String dummy();
-    }
+	private long notReadyStartTime;
+	private long notReadyEndTime;
 
-	private long startTime;
 	
-	@Activate
-	public void activate() {
-		startTime = System.currentTimeMillis();
-	}
-
 	@Override
 	public String getName() {
 		return "Switchable ready check";
@@ -36,8 +30,23 @@ public class ReadyCheck implements SystemReadyCheck {
 
 	@Override
 	public CheckStatus getStatus() {
-		CheckStatus.State state = System.currentTimeMillis() - startTime < 60000 ? CheckStatus.State.RED : CheckStatus.State.GREEN;
+		CheckStatus.State state = !isReady() ? CheckStatus.State.RED : CheckStatus.State.GREEN;
 		return new CheckStatus(getName(), StateType.READY, state , "");
 	}
 
+	private boolean isReady() {
+		long curTime = System.currentTimeMillis();
+		return curTime < notReadyStartTime || curTime > notReadyEndTime;
+	}
+
+	public void notReadyForSeconds(int seconds) {
+		this.notReadyStartTime = System.currentTimeMillis();
+		this.notReadyEndTime = this.notReadyStartTime + seconds * 1000;
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		notReadyForSeconds(60);
+		resp.getWriter().print("Reporting not ready for 60 seconds");
+	}
 }
