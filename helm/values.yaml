@@ -5,7 +5,7 @@
 replicaCount: 2
 
 image:
-  repository: dulvac/osgi.example.kubernetes
+  repository: dulvac/adapt-to-2018
   tag: latest
   pullPolicy: IfNotPresent
 
