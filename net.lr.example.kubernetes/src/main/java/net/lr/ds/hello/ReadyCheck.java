@@ -31,7 +31,10 @@ public class ReadyCheck extends HttpServlet implements SystemReadyCheck, Servlet
 	@Override
 	public CheckStatus getStatus() {
 		CheckStatus.State state = !isReady() ? CheckStatus.State.RED : CheckStatus.State.GREEN;
-		return new CheckStatus(getName(), StateType.READY, state , "");
+		String desc = !isReady()
+				? (notReadyEndTime - System.currentTimeMillis())/ 1000 + " seconds left to report NOT ready"
+				: "Set to report ready";
+		return new CheckStatus(getName(), StateType.READY, state , desc);
 	}
 
 	private boolean isReady() {
@@ -45,7 +48,7 @@ public class ReadyCheck extends HttpServlet implements SystemReadyCheck, Servlet
 	}
 	
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		notReadyForSeconds(60);
 		resp.getWriter().print("Reporting not ready for 60 seconds");
 	}

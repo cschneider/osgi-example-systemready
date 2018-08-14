@@ -5,3 +5,6 @@ target
 in
 generated/
 .DS_store
+*.iml
+.idea
+*.proj

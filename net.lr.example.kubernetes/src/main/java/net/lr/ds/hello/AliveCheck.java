@@ -28,12 +28,12 @@ public class AliveCheck extends HttpServlet implements SystemReadyCheck, Servlet
 
 	@Override
 	public CheckStatus getStatus() {
-		return new CheckStatus(getName(), StateType.ALIVE, state , "");
+		return new CheckStatus(getName(), StateType.ALIVE, state , "This is a test check that can be switched GREEN/ RED");
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		this.state = State.RED;
-		resp.getWriter().print("Reporting not alive .. our instance should be killed soon");
+		resp.getWriter().print("Reporting not alive. Our instance should be killed soon");
 	}
 }
