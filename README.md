@@ -42,21 +42,30 @@ after a very short while it should return GREEN.
 
 Allows access to the felix webconsole to look into all details of the system.
 
-## Run in Kubernetes
+## Deploy in Kubernetes, with Helm
 
 You need access to a kubernetes cluster. To achieve this either install minikube
 or get a kubernetes cluster from a cloud provider.
 
 For my tests I installed the kubernetes service on Azure. This only needs a few
-clicks. The default settings work fine.
+clicks. Additionally, 
+[install Helm](https://docs.microsoft.com/en-us/azure/container-service/kubernetes/container-service-kubernetes-helm) 
 
-This does a maven build plus docker container creation and docker push.
+Export an env var with the name of your registry
+    
+    export $DOCKER_REGISTR=<your registry; e.g. "dulvac">
 
-	sh build.sh
+This builds the docker image and pushes it to the registry
 
-Deploy to your kubernetes Cluster
+	sh build.sh 
+	
+Deploy a Helm Chart
+    
+    sh deploy.sh 
 
-	kubectl apply -f example-kubernetes
+Alternatively, deploy to your kubernetes Cluster without Helm (file would need to be changed - like the image repository)
+
+	kubectl apply -f adaptto-2018-example.yaml
 
 This installs the docker container as a deployment with one instance.
 Additionally it creates a service with a load balancer.
@@ -93,6 +102,8 @@ Then do
 
 This builds and deploys the new docker image and then deletes all existing pods.
 This will cause kubernetes to spawn a new pod which loads the new image.
+
+TODO: demo script
 
 ### Test liveness
 

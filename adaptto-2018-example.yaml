@@ -17,9 +17,9 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       containers:
-      - image: dockeradulvac.azurecr.io/osgi.example.kubernetes
+      - image: dulvac/osgi.example.kubernetes
         name: adaptto-2018-example
-          imagePullPolicy: Always
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -37,8 +37,6 @@ spec:
           initialDelaySeconds: 15
           timeoutSeconds: 1
           periodSeconds: 5
-      imagePullSecrets:
-        - name: registrycred
 ---
 apiVersion: v1
 kind: Service
