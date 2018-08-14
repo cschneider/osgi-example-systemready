@@ -25,7 +25,7 @@ public class ReadyCheck extends HttpServlet implements SystemReadyCheck, Servlet
 	
 	@Override
 	public String getName() {
-		return "Toggable ready check";
+		return "Switchable ready check";
 	}
 
 	@Override

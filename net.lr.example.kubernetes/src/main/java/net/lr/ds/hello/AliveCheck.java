@@ -23,12 +23,12 @@ public class AliveCheck extends HttpServlet implements SystemReadyCheck, Servlet
 	
 	@Override
 	public String getName() {
-		return "Toggable alive check";
+		return "Switchable alive check";
 	}
 
 	@Override
 	public CheckStatus getStatus() {
-		return new CheckStatus(getName(), StateType.ALIVE, state , "This is a toggable test check");
+		return new CheckStatus(getName(), StateType.ALIVE, state , "This is a test check that can be switched GREEN/ RED");
 	}
 
 	@Override
