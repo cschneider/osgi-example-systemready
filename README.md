@@ -58,28 +58,27 @@ This does a maven build plus docker container creation and docker push.
 
 Deploy to your kubernetes Cluster
 
-	cat adaptto-2018-example.yaml | sed s/DOCKER_USERNAME/$DOCKER_USERNAME/ | kubectl apply -f -
+	sh deploy.sh
 
-This installs the docker container as a deployment with one instance.
-Additionally it creates a service with a load balancer.
+This installs the docker container as a deployment with one instance and
+a service with a load balancer for access.
 
 ### Check the deployment worked
 
-   kubectl get pods
+    kubectl get pods
 
-	 It should display output like below. We should have one pod installed that
-	 contains our OSGi app.
+It should display output like below. We should have one pod installed that contains our OSGi app.
 
 	 NAME                                  READY     STATUS    RESTARTS   AGE
-	 example-kubernetes-6b7985c88f-tcfmh   1/1       Running   0          10h
+	 example-systemready-6b7985c88f-tcfmh   1/1       Running   0          10h
 
 	 kubectl get services
 
-	 Here we should see a service that makes our example available on an external
-	 ip with a load balancer.
+Here we should see a service that makes our example available on an external
+ip with a load balancer.
 
 	 NAME                 TYPE           CLUSTER-IP    EXTERNAL-IP      PORT(S)          AGE
-	 example-kubernetes   LoadBalancer   10.0.207.16   104.211.55.231   8080:30215/TCP   22h
+	 example-systemready  LoadBalancer   10.0.207.16   104.211.55.231   80:30215/TCP     22h
 
 Now test the steps from "access the deployment" above with your external IP
 instead of localhost.
@@ -91,7 +90,7 @@ Change some code.
 Then do
 
 	sh build.sh
-	kubectl delete pod -l run=example-kubernetes
+	kubectl delete pod -l run=example-systemready
 
 This builds and deploys the new docker image and then deletes all existing pods.
 This will cause kubernetes to spawn a new pod which loads the new image.
@@ -106,7 +105,7 @@ To see current pods run this in a shell. It will wait and display changes.
     
 Now let's report not alive:
 
-    http://cschneid.eastus.cloudapp.azure.com:8080/control/notalive
+    curl -X POST http://157.56.178.108/control/notalive
     
 After a few seconds we should see the number of restarts increase in the shell where we check for the pods.
 Alternatively you can use the kubernetes dashboard and look into the running pod. It will show failed readiness and liveness checks and report that the 

@@ -2,23 +2,23 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: adaptto-2018-example
+    app: example-systemready
     ver: 1.0.0-SNAPSHOT
-  name: adaptto-2018-example
+  name: example-systemready
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: adaptto-2018-example
+      app: example-systemready
   template:
     metadata:
       labels:
-        app: adaptto-2018-example
+        app: example-systemready
     spec:
       terminationGracePeriodSeconds: 30
       containers:
-      - image: DOCKER_USERNAME/osgi.example.kubernetes
-        name: adaptto-2018-example
+      - image: DOCKER_USERNAME/example.systemready
+        name: example-systemready
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -42,15 +42,14 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: adaptto-2018-example
-  name: adaptto-2018-example
+    app: example-systemready
+  name: example-systemready
 spec:
   externalTrafficPolicy: Cluster
   ports:
-  - nodePort: 30215
-    port: 8080
+  - port: 80
     protocol: TCP
     targetPort: 8080
   selector:
-    app: adaptto-2018-example
+    app: example-systemready
   type: LoadBalancer

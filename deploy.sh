@@ -1,3 +1,2 @@
 #!/bin/sh
-kubectl apply -f adaptto-2018-example.yaml
-
+cat example-systemready.yaml | sed s/DOCKER_USERNAME/$DOCKER_USERNAME/ | kubectl apply -f -
