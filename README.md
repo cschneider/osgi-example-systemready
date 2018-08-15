@@ -52,11 +52,13 @@ clicks. The default settings work fine.
 
 This does a maven build plus docker container creation and docker push.
 
+	export DOCKER_USERNAME=<your user>
+	export DOCKER_PASSWORD=<your password>
 	sh build.sh
 
 Deploy to your kubernetes Cluster
 
-	kubectl apply -f example-kubernetes
+	cat adaptto-2018-example.yaml | sed s/DOCKER_USERNAME/$DOCKER_USERNAME/ | kubectl apply -f -
 
 This installs the docker container as a deployment with one instance.
 Additionally it creates a service with a load balancer.
