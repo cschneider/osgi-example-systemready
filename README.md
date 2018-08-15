@@ -81,7 +81,11 @@ ip with a load balancer.
 	 example-systemready  LoadBalancer   10.0.207.16   104.211.55.231   80:30215/TCP     22h
 
 Now test the steps from "access the deployment" above with your external IP
-instead of localhost.
+instead of localhost and with port 80.
+
+You can use this command to get the external IP:
+
+    kubectl get svc example-systemready -o json | jq -r .status.loadBalancer.ingress[0].ip
 
 ### Update kubernetes deployment
 
@@ -105,7 +109,7 @@ To see current pods run this in a shell. It will wait and display changes.
     
 Now let's report not alive:
 
-    curl -X POST http://157.56.178.108/control/notalive
+    curl -X POST http://ext-ip/control/notalive
     
 After a few seconds we should see the number of restarts increase in the shell where we check for the pods.
 Alternatively you can use the kubernetes dashboard and look into the running pod. It will show failed readiness and liveness checks and report that the 
@@ -123,11 +127,11 @@ Focus on the ready column. It should report "1/1".
     
 Now let's report not ready for 60 seconds:
 
-    http://cschneid.eastus.cloudapp.azure.com:8080/control/notready
+    curl -X POST http://ext-ip/control/notready
     
 Then quickly check the ready probe:
 
-    http://cschneid.eastus.cloudapp.azure.com:8080/systemready
+    http://ext-ip/systemready
     
 It will now report RED. Keep an eye on the pod list above. It should update with "0/1" in the ready column. 
 Once kubernetes consideres the pod as not ready it will take it out of the load balancer. So when we check the ready state above again it will
@@ -139,4 +143,4 @@ After the 60 seconds it should go back to "1/1". The ready state in our probe wi
 
 Scale the deployment to 2 intances and check how the cluster now behaves.
 
-    kubectl scale deployments/example-kubernetes --replicas=2
+    kubectl scale deployments/example-systemready --replicas=2
