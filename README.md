@@ -1,6 +1,6 @@
 # OSGi Kubernetes example
 
-[![Build Status](https://travis-ci.com/cschneider/osgi-example-kubernetes.svg?branch=master)](https://travis-ci.com/cschneider/osgi-example-kubernetes)
+[![Build Status](https://travis-ci.com/cschneider/osgi-example-systemready.svg?branch=master)](https://travis-ci.com/cschneider/osgi-example-systemready)
 
 This example shows how to create a small OSGi based application and deploy it to kubernetes.
 
