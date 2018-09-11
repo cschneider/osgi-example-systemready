@@ -6,7 +6,7 @@ metadata:
     ver: 1.0.0-SNAPSHOT
   name: example-systemready
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: example-systemready
@@ -27,15 +27,15 @@ spec:
           httpGet:
             path: /systemready
             port: 8080
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
           periodSeconds: 5
         livenessProbe:
           httpGet:
             path: /systemalive
             port: 8080
           initialDelaySeconds: 15
-          timeoutSeconds: 1
+          timeoutSeconds: 5
           periodSeconds: 5
 ---
 apiVersion: v1
