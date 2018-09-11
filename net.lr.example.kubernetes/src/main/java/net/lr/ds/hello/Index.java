@@ -20,16 +20,19 @@ import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletPatte
 public class Index extends HttpServlet implements Servlet {
 	private static final long serialVersionUID = 1L;
 	private String styles;
-
+	private long started;
+	
 	public Index() {
 		InputStream in = this.getClass().getResourceAsStream("/styles.css");
 		try (Scanner scanner = new Scanner(in, "UTF-8")) {
 			styles = scanner.useDelimiter("\\A").next();
 		}
+		started = System.currentTimeMillis();
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		long seconds = (System.currentTimeMillis() - started) / 1000;
 		String hostname = InetAddress.getLocalHost().getHostName();
 		PrintWriter wr = resp.getWriter();
 		wr.write("<html><style>\n");
@@ -39,6 +42,7 @@ public class Index extends HttpServlet implements Servlet {
 		wr.write("<div class=\"container\">");
 		wr.write("<h1>AdaptTo 2018 kubernetes example</h1>");
 		wr.write("<p>Hostname: " + hostname +"</p>");
+		wr.write("<p>Uptime: " + seconds +"s</p>");
 
 		wr.write("<p><form action=\"/control/notready\" method=\"post\">\n");
 		wr.write("<input type=\"submit\" value=\"Report not ready for 60 seconds\"</input>\n");
