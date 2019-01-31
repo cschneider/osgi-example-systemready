@@ -6,10 +6,15 @@ metadata:
     ver: 1.0.0-SNAPSHOT
   name: example-systemready
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: example-systemready
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   template:
     metadata:
       labels:
