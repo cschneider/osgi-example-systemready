@@ -51,8 +51,8 @@ public class Index extends HttpServlet implements Servlet {
 		wr.write("<input type=\"submit\" value=\"Report not alive\"</div>\n");
 		wr.write("</form></p>\n");
 		
-		wr.write("<p><a href=\"/systemready\">Show ready state</a></p>\n");
-		wr.write("<p><a href=\"/systemalive\">Show alive state</a></p>\n");
+		wr.write("<p><a href=\"/system/health/ready\">Show ready state</a></p>\n");
+		wr.write("<p><a href=\"/system/health/alive\">Show alive state</a></p>\n");
 		wr.write("</div>");
 		wr.write("</body></html>");
 	}

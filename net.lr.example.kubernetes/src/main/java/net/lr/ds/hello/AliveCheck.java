@@ -8,32 +8,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.felix.systemready.CheckStatus;
-import org.apache.felix.systemready.CheckStatus.State;
-import org.apache.felix.systemready.StateType;
-import org.apache.felix.systemready.SystemReadyCheck;
+import org.apache.felix.hc.annotation.HealthCheckService;
+import org.apache.felix.hc.api.HealthCheck;
+import org.apache.felix.hc.api.Result;
+import org.apache.felix.hc.api.Result.Status;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletPattern;
 
 @SuppressWarnings("serial")
 @Component
 @HttpWhiteboardServletPattern("/control/notalive")
-public class AliveCheck extends HttpServlet implements SystemReadyCheck, Servlet {
-	private CheckStatus.State state = State.GREEN;
+@HealthCheckService(name = "alivecheck", tags= {"alive"})
+public class AliveCheck extends HttpServlet implements HealthCheck, Servlet {
+	private org.apache.felix.hc.api.Result.Status status = Status.OK;
 	
 	@Override
-	public String getName() {
-		return "Switchable alive check";
-	}
-
-	@Override
-	public CheckStatus getStatus() {
-		return new CheckStatus(getName(), StateType.ALIVE, state , "This is a test check that can be switched GREEN/ RED");
-	}
-
-	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		this.state = State.RED;
+		this.status = Status.CRITICAL;
 		resp.getWriter().print("Reporting not alive. Our instance should be killed soon");
+	}
+
+	@Override
+	public Result execute() {
+		return new Result(status, "");
 	}
 }

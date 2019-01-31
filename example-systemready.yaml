@@ -6,7 +6,7 @@ metadata:
     ver: 1.0.0-SNAPSHOT
   name: example-systemready
 spec:
-  replicas: 5
+  replicas: 2
   selector:
     matchLabels:
       app: example-systemready
@@ -30,14 +30,14 @@ spec:
           protocol: TCP
         readinessProbe:
           httpGet:
-            path: /systemready
+            path: /system/health/ready
             port: 8080
           initialDelaySeconds: 15
           timeoutSeconds: 5
           periodSeconds: 5
         livenessProbe:
           httpGet:
-            path: /systemalive
+            path: /system/health/alive
             port: 8080
           initialDelaySeconds: 15
           timeoutSeconds: 5

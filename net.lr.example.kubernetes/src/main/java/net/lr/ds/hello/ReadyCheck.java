@@ -8,33 +8,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.felix.systemready.CheckStatus;
-import org.apache.felix.systemready.StateType;
-import org.apache.felix.systemready.SystemReadyCheck;
+import org.apache.felix.hc.annotation.HealthCheckService;
+import org.apache.felix.hc.api.HealthCheck;
+import org.apache.felix.hc.api.Result;
+import org.apache.felix.hc.api.Result.Status;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletPattern;
 
 @SuppressWarnings("serial")
 @Component
 @HttpWhiteboardServletPattern("/control/notready")
-public class ReadyCheck extends HttpServlet implements SystemReadyCheck, Servlet {
+@HealthCheckService(name = "readycheck", tags = {"ready"})
+public class ReadyCheck extends HttpServlet implements HealthCheck, Servlet {
 	
 	private long notReadyStartTime;
 	private long notReadyEndTime;
 
-	
 	@Override
-	public String getName() {
-		return "Switchable ready check";
-	}
-
-	@Override
-	public CheckStatus getStatus() {
-		CheckStatus.State state = !isReady() ? CheckStatus.State.RED : CheckStatus.State.GREEN;
+	public Result execute() {
+		Result.Status state = !isReady() ? Status.CRITICAL : Status.OK;
 		String desc = !isReady()
 				? (notReadyEndTime - System.currentTimeMillis())/ 1000 + " seconds left to report NOT ready"
 				: "Set to report ready";
-		return new CheckStatus(getName(), StateType.READY, state , desc);
+		return new Result(state , desc);
 	}
 
 	private boolean isReady() {
