@@ -144,3 +144,11 @@ After the 60 seconds it should go back to "1/1". The ready state in our probe wi
 Scale the deployment to 2 intances and check how the cluster now behaves.
 
     kubectl scale deployments/example-systemready --replicas=2
+
+    
+#### Replace a pod by changing a property
+
+    kubectl patch pod <a pod name> -p "{\"metadata\":{\"labels\":{\"valid\":\"no\"}}}"
+
+This changes a property of a pod. The property is part of the selector of the deployment. So after this change the pods is considered
+outdated and replaced in a rolling update.
